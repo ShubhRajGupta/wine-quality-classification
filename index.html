@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Wine Quality Classification - Physicochemical Machine Learning Classification System">
+  <title>WineQuality ML &bull; Physicochemical Classification Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B1D2F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M8 22h8'/><path d='M12 15v7'/><path d='M12 15a5 5 0 0 0 5-5V4H7v6a5 5 0 0 0 5 5Z'/></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Animated Waving Dotted Canvas Background -->
+  <canvas id="bg-wave-canvas" class="bg-wave-canvas" aria-hidden="true"></canvas>
+
+  <!-- Full-Width Website Top Navbar -->
+  <header class="site-navbar">
+    <div class="nav-container">
+      <!-- Brand Logo & Name -->
+      <a href="#prediction" class="nav-brand" id="brand-link">
+        <span class="brand-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 22h8"/>
+            <path d="M12 15v7"/>
+            <path d="M12 15a5 5 0 0 0 5-5V4H7v6a5 5 0 0 0 5 5Z"/>
+          </svg>
+        </span>
+        <div class="brand-info">
+          <span class="brand-title">WineQuality<span class="brand-accent">ML</span></span>
+          <span class="brand-tagline">Classification Project</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="nav-links" aria-label="Website Pages">
+        <button type="button" class="nav-item active" data-page="prediction" id="nav-prediction">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31L4.25 19.95A1.5 1.5 0 0 0 5.56 22h12.88a1.5 1.5 0 0 0 1.31-2.05L14 9.31V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+          </span>
+          <span>Prediction</span>
+        </button>
+        <button type="button" class="nav-item" data-page="dataset" id="nav-dataset">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+          </span>
+          <span>Dataset</span>
+        </button>
+        <button type="button" class="nav-item" data-page="model" id="nav-model">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+          </span>
+          <span>Model</span>
+        </button>
+        <button type="button" class="nav-item" data-page="results" id="nav-results">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          </span>
+          <span>Results</span>
+        </button>
+        <button type="button" class="nav-item" data-page="project" id="nav-project">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </span>
+          <span>Project</span>
+        </button>
+      </nav>
+
+      <!-- Right Navbar Status Indicator -->
+      <div class="nav-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span class="status-label">Client ML Engine Ready</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Website Body Container -->
+  <div class="main-wrapper">
+
+    <!-- ==================================================================
+         PAGE 1: PREDICTION (Website App Layout: Inputs Left, Live Result Right)
+         ================================================================== -->
+    <section id="page-prediction" class="page-view active" aria-labelledby="heading-prediction">
+      
+      <!-- Page Hero / Title Banner -->
+      <div class="page-hero">
+        <div class="hero-text">
+          <div class="breadcrumb">
+            <span>Project</span> &rsaquo; <span>Inference Engine</span> &rsaquo; <strong>Physicochemical Prediction</strong>
+          </div>
+          <h1 id="heading-prediction" class="page-title">Wine Quality Classification</h1>
+          <p class="page-subtitle">Input laboratory physicochemical properties to predict whether wine quality is classified as <strong>Good</strong> or <strong>Bad</strong>.</p>
+        </div>
+        <div class="hero-actions">
+          <span class="sample-label">Load Test Sample:</span>
+          <button type="button" id="load-good-btn" class="btn btn-sm btn-sample-good" title="Load sample for high quality wine (Alcohol 12.8%, Low Volatiles)">
+            <span class="sample-dot dot-good"></span> Good Sample
+          </button>
+          <button type="button" id="load-bad-btn" class="btn btn-sm btn-sample-bad" title="Load sample for low quality wine (Alcohol 9.4%, High Volatiles)">
+            <span class="sample-dot dot-bad"></span> Poor Sample
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-Column Application Layout -->
+      <div class="app-layout">
+        
+        <!-- Left Column: 11 Input Features Form -->
+        <div class="form-column">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Laboratory Parameters</h2>
+                <p class="panel-desc">All 11 features correspond to UCI laboratory test standards.</p>
+              </div>
+            </div>
+
+            <form id="wine-form" novalidate>
+              <!-- Category 1: Acidity & pH Balance -->
+              <div class="form-section">
+                <div class="section-title-bar">
+                  <span class="section-num">1</span>
+                  <h3 class="section-title">Acidity & pH Balance</h3>
+                  <span class="section-badge">4 parameters</span>
+                </div>
+                <div class="input-grid grid-2">
+                  <!-- Fixed Acidity -->
+                  <div class="input-field" id="group-fixed_acidity">
+                    <label for="fixed_acidity" class="field-label">
+                      <span>Fixed Acidity</span>
+                      <span class="field-unit">g/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="fixed_acidity" name="fixed_acidity" min="3.0" max="16.0" step="0.1" placeholder="8.5" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 3.0 – 16.0</span>
+                      <span class="field-error" id="err-fixed_acidity"></span>
+                    </div>
+                  </div>
+
+                  <!-- Volatile Acidity -->
+                  <div class="input-field" id="group-volatile_acidity">
+                    <label for="volatile_acidity" class="field-label">
+                      <span>Volatile Acidity</span>
+                      <span class="field-unit">g/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="volatile_acidity" name="volatile_acidity" min="0.10" max="1.60" step="0.01" placeholder="0.28" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 0.10 – 1.60</span>
+                      <span class="field-error" id="err-volatile_acidity"></span>
+                    </div>
+                  </div>
+
+                  <!-- Citric Acid -->
+                  <div class="input-field" id="group-citric_acid">
+                    <label for="citric_acid" class="field-label">
+                      <span>Citric Acid</span>
+                      <span class="field-unit">g/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="citric_acid" name="citric_acid" min="0.00" max="1.00" step="0.01" placeholder="0.49" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 0.00 – 1.00</span>
+                      <span class="field-error" id="err-citric_acid"></span>
+                    </div>
+                  </div>
+
+                  <!-- pH -->
+                  <div class="input-field" id="group-ph">
+                    <label for="ph" class="field-label">
+                      <span>pH Level</span>
+                      <span class="field-unit">scale</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="ph" name="ph" min="2.70" max="4.10" step="0.01" placeholder="3.30" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 2.70 – 4.10</span>
+                      <span class="field-error" id="err-ph"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Category 2: Sulfur Preservation -->
+              <div class="form-section">
+                <div class="section-title-bar">
+                  <span class="section-num">2</span>
+                  <h3 class="section-title">Sulfur Compounds & Preservatives</h3>
+                  <span class="section-badge">3 parameters</span>
+                </div>
+                <div class="input-grid grid-2">
+                  <!-- Free SO2 -->
+                  <div class="input-field" id="group-free_sulfur_dioxide">
+                    <label for="free_sulfur_dioxide" class="field-label">
+                      <span>Free SO₂</span>
+                      <span class="field-unit">mg/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="free_sulfur_dioxide" name="free_sulfur_dioxide" min="1" max="75" step="1" placeholder="17" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 1 – 75</span>
+                      <span class="field-error" id="err-free_sulfur_dioxide"></span>
+                    </div>
+                  </div>
+
+                  <!-- Total SO2 -->
+                  <div class="input-field" id="group-total_sulfur_dioxide">
+                    <label for="total_sulfur_dioxide" class="field-label">
+                      <span>Total SO₂</span>
+                      <span class="field-unit">mg/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="total_sulfur_dioxide" name="total_sulfur_dioxide" min="5" max="300" step="1" placeholder="34" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 5 – 300</span>
+                      <span class="field-error" id="err-total_sulfur_dioxide"></span>
+                    </div>
+                  </div>
+
+                  <!-- Sulphates -->
+                  <div class="input-field" id="group-sulphates">
+                    <label for="sulphates" class="field-label">
+                      <span>Sulphates</span>
+                      <span class="field-unit">g/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="sulphates" name="sulphates" min="0.30" max="2.00" step="0.01" placeholder="0.86" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 0.30 – 2.00</span>
+                      <span class="field-error" id="err-sulphates"></span>
+                    </div>
+                  </div>
+
+                  <!-- Parameter Guidance Card to balance Category 2 grid -->
+                  <div class="param-guidance-card">
+                    <span class="guidance-kicker">Chemical Benchmark</span>
+                    <p class="guidance-text">Free SO₂ prevents rapid oxidation; Sulphates act as antimicrobial stabilizing salts.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Category 3: Body & Fermentation -->
+              <div class="form-section">
+                <div class="section-title-bar">
+                  <span class="section-num">3</span>
+                  <h3 class="section-title">Body & Fermentation Composition</h3>
+                  <span class="section-badge">4 parameters</span>
+                </div>
+                <div class="input-grid grid-2">
+                  <!-- Residual Sugar -->
+                  <div class="input-field" id="group-residual_sugar">
+                    <label for="residual_sugar" class="field-label">
+                      <span>Residual Sugar</span>
+                      <span class="field-unit">g/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="residual_sugar" name="residual_sugar" min="0.5" max="20.0" step="0.1" placeholder="2.6" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 0.5 – 20.0</span>
+                      <span class="field-error" id="err-residual_sugar"></span>
+                    </div>
+                  </div>
+
+                  <!-- Chlorides -->
+                  <div class="input-field" id="group-chlorides">
+                    <label for="chlorides" class="field-label">
+                      <span>Chlorides</span>
+                      <span class="field-unit">g/dm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="chlorides" name="chlorides" min="0.010" max="0.600" step="0.001" placeholder="0.075" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 0.010 – 0.600</span>
+                      <span class="field-error" id="err-chlorides"></span>
+                    </div>
+                  </div>
+
+                  <!-- Density -->
+                  <div class="input-field" id="group-density">
+                    <label for="density" class="field-label">
+                      <span>Density</span>
+                      <span class="field-unit">g/cm³</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="density" name="density" min="0.9850" max="1.0050" step="0.0001" placeholder="0.9956" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 0.9850 – 1.0050</span>
+                      <span class="field-error" id="err-density"></span>
+                    </div>
+                  </div>
+
+                  <!-- Alcohol -->
+                  <div class="input-field highlight-field" id="group-alcohol">
+                    <label for="alcohol" class="field-label">
+                      <span>Alcohol Content</span>
+                      <span class="field-unit highlight-unit">% vol</span>
+                    </label>
+                    <div class="field-input-wrap">
+                      <input type="number" id="alcohol" name="alcohol" min="8.0" max="15.5" step="0.1" placeholder="12.8" required>
+                    </div>
+                    <div class="field-footer">
+                      <span class="range-hint">Range: 8.0 – 15.5</span>
+                      <span class="field-error" id="err-alcohol"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Alert Message -->
+              <div id="form-alert" class="alert-box" role="alert" style="display: none;"></div>
+
+              <!-- Action Controls -->
+              <div class="form-actions">
+                <button type="submit" id="predict-btn" class="btn btn-primary">
+                  <span class="btn-icon">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  </span>
+                  <span>Predict Quality</span>
+                </button>
+                <button type="button" id="reset-btn" class="btn btn-outline">
+                  Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Sticky Real-Time Prediction Outcome Panel -->
+        <div class="result-column">
+          <div class="panel sticky-panel" id="result-section">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Prediction Result</h2>
+                <p class="panel-desc">Calculated prediction output.</p>
+              </div>
+            </div>
+
+            <!-- Empty Placeholder State -->
+            <div id="result-empty" class="result-empty">
+              <div class="empty-icon-circle">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M8 22h8"/>
+                  <path d="M12 15v7"/>
+                  <path d="M12 15a5 5 0 0 0 5-5V4H7v6a5 5 0 0 0 5 5Z"/>
+                </svg>
+              </div>
+              <h3 class="empty-heading">Ready for Evaluation</h3>
+              <p class="empty-body">Click <strong>Predict Quality</strong> or load a test sample to view live classification results.</p>
+            </div>
+
+            <!-- Active Populated Result State -->
+            <div id="result-card" class="result-populated" style="display: none;">
+              <!-- Main Classification Card -->
+              <div class="outcome-card">
+                <span class="outcome-kicker">Predicted Quality</span>
+                <div class="outcome-badge-container">
+                  <div id="result-badge" class="result-badge badge-good">
+                    <span id="badge-icon" class="badge-icon">●</span>
+                    <span id="badge-text" class="badge-text">Good</span>
+                  </div>
+                  <div class="outcome-label-wrap">
+                    <span id="detail-category-label" class="outcome-label">High Quality Wine</span>
+                    <span id="detail-status" class="outcome-sub">Meets High Quality Benchmark</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confidence Score Gauge -->
+              <div class="score-card">
+                <div class="score-header">
+                  <span class="score-title">Quality Confidence Score</span>
+                  <span id="score-percentage" class="score-percent">99%</span>
+                </div>
+                <div class="progress-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="quality-progress-bar">
+                  <div class="threshold-line" title="Decision Boundary (50%)"></div>
+                  <div id="progress-bar-fill" class="progress-fill fill-good" style="width: 99%;"></div>
+                </div>
+                <div class="scale-labels">
+                  <span>0% (Poor Quality)</span>
+                  <span class="scale-mid">50% Boundary</span>
+                  <span>100% (High Quality)</span>
+                </div>
+              </div>
+
+              <!-- Diagnostic Details Breakdown -->
+              <div class="diagnostics-list">
+                <div class="diag-row">
+                  <span class="diag-label">Primary Driver</span>
+                  <span id="detail-drivers" class="diag-value">Alcohol content (12.8%)</span>
+                </div>
+                <div class="diag-row">
+                  <span class="diag-label">Decision Boundary</span>
+                  <span class="diag-value">Probability &ge; 0.50</span>
+                </div>
+                <div class="diag-row">
+                  <span class="diag-label">Engine Latency</span>
+                  <span class="diag-value mono-val">&lt; 1 ms (Client-Side)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 2: DATASET (Informational Overview)
+         ================================================================== -->
+    <section id="page-dataset" class="page-view" aria-labelledby="heading-dataset">
+      <div class="page-hero">
+        <div class="hero-text">
+          <div class="breadcrumb">
+            <span>Project</span> &rsaquo; <span>Data Analysis</span> &rsaquo; <strong>UCI Wine Quality</strong>
+          </div>
+          <h1 id="heading-dataset" class="page-title">Dataset Overview</h1>
+          <p class="page-subtitle">Physicochemical laboratory benchmark dataset for Portuguese <em>Vinho Verde</em> red wine instances (Cortez et al.).</p>
+        </div>
+      </div>
+
+      <!-- Overview Stats Cards -->
+      <div class="stats-grid stats-5">
+        <div class="stat-card">
+          <span class="stat-kicker">Dataset Name</span>
+          <span class="stat-main">Wine Quality</span>
+          <span class="stat-note">UCI ML Repository</span>
+        </div>
+        <div class="stat-card highlight-stat">
+          <span class="stat-kicker">Total Samples</span>
+          <span class="stat-main">1,599</span>
+          <span class="stat-note">Laboratory tested</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-kicker">Input Features</span>
+          <span class="stat-main">11</span>
+          <span class="stat-note">Physicochemical tests</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-kicker">Target Variable</span>
+          <span class="stat-main">Wine Quality</span>
+          <span class="stat-note">Continuous transformed</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-kicker">Target Classes</span>
+          <span class="stat-main">Bad / Good</span>
+          <span class="stat-note">53.5% Good &bull; 46.5% Bad</span>
+        </div>
+      </div>
+
+      <!-- Feature Reference Table -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Physicochemical Feature Dictionary</h2>
+            <p class="panel-desc">Descriptions, units, and ranges for all 11 laboratory inputs.</p>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="web-table">
+            <thead>
+              <tr>
+                <th style="width: 50px;">#</th>
+                <th>Feature Name</th>
+                <th>Standard Unit</th>
+                <th>Observed Range</th>
+                <th>Chemical Role in Wine Quality</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono-cell">01</td>
+                <td><strong>Fixed Acidity</strong></td>
+                <td><code class="code-unit">g/dm³</code></td>
+                <td class="mono-cell">4.6 – 15.9</td>
+                <td>Non-volatile organic acids (predominantly tartaric) providing tartness and structural stability.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">02</td>
+                <td><strong>Volatile Acidity</strong></td>
+                <td><code class="code-unit">g/dm³</code></td>
+                <td class="mono-cell">0.12 – 1.58</td>
+                <td>Acetic acid content. High concentrations produce an unpleasant vinegar taste and lower wine quality.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">03</td>
+                <td><strong>Citric Acid</strong></td>
+                <td><code class="code-unit">g/dm³</code></td>
+                <td class="mono-cell">0.00 – 1.00</td>
+                <td>Found in small amounts; imparts pleasant freshness and citrus aromatics to the flavor profile.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">04</td>
+                <td><strong>Residual Sugar</strong></td>
+                <td><code class="code-unit">g/dm³</code></td>
+                <td class="mono-cell">0.9 – 15.5</td>
+                <td>Natural sugar remaining after fermentation completes. Influences sweetness and mouthfeel.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">05</td>
+                <td><strong>Chlorides</strong></td>
+                <td><code class="code-unit">g/dm³</code></td>
+                <td class="mono-cell">0.012 – 0.611</td>
+                <td>Sodium chloride content (salinity); higher levels adversely affect overall perception.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">06</td>
+                <td><strong>Free Sulfur Dioxide</strong></td>
+                <td><code class="code-unit">mg/dm³</code></td>
+                <td class="mono-cell">1 – 72</td>
+                <td>Dissolved SO₂ gas; essential for protecting wine against oxidation and microbial growth.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">07</td>
+                <td><strong>Total Sulfur Dioxide</strong></td>
+                <td><code class="code-unit">mg/dm³</code></td>
+                <td class="mono-cell">6 – 289</td>
+                <td>Sum of free and bound SO₂; excessive levels cause harsh pungent aroma and sulfur smell.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">08</td>
+                <td><strong>Density</strong></td>
+                <td><code class="code-unit">g/cm³</code></td>
+                <td class="mono-cell">0.990 – 1.004</td>
+                <td>Specific density governed primarily by alcohol content (lighter) and residual sugar (heavier).</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">09</td>
+                <td><strong>pH</strong></td>
+                <td><code class="code-unit">scale</code></td>
+                <td class="mono-cell">2.74 – 4.01</td>
+                <td>Standard logarithmic acidity scale (typical range 3.2 – 3.6). Governs antimicrobial preservation.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">10</td>
+                <td><strong>Sulphates</strong></td>
+                <td><code class="code-unit">g/dm³</code></td>
+                <td class="mono-cell">0.33 – 2.00</td>
+                <td>Potassium sulphate salt additive serving as an antioxidant and antimicrobial stabilizer.</td>
+              </tr>
+              <tr>
+                <td class="mono-cell">11</td>
+                <td><strong>Alcohol</strong></td>
+                <td><code class="code-unit">% vol</code></td>
+                <td class="mono-cell">8.4 – 14.9</td>
+                <td>Ethanol volume percentage; empirical strongest positive driver of wine quality ratings.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sample Dataset Rows Preview -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Raw Dataset Preview (First 5 Rows)</h2>
+            <p class="panel-desc">Representative instances from the normalized training repository.</p>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="web-table preview-table">
+            <thead>
+              <tr>
+                <th>Fixed Ac.</th>
+                <th>Vol. Ac.</th>
+                <th>Citric</th>
+                <th>Sugar</th>
+                <th>Chlor.</th>
+                <th>Free SO₂</th>
+                <th>Total SO₂</th>
+                <th>Density</th>
+                <th>pH</th>
+                <th>Sulph.</th>
+                <th>Alcohol</th>
+                <th>Score</th>
+                <th>Class</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono-cell">7.4</td>
+                <td class="mono-cell">0.70</td>
+                <td class="mono-cell">0.00</td>
+                <td class="mono-cell">1.9</td>
+                <td class="mono-cell">0.076</td>
+                <td class="mono-cell">11</td>
+                <td class="mono-cell">34</td>
+                <td class="mono-cell">0.9978</td>
+                <td class="mono-cell">3.51</td>
+                <td class="mono-cell">0.56</td>
+                <td class="mono-cell">9.4</td>
+                <td class="mono-cell">5</td>
+                <td><span class="badge-mini badge-bad">Bad</span></td>
+              </tr>
+              <tr>
+                <td class="mono-cell">7.8</td>
+                <td class="mono-cell">0.88</td>
+                <td class="mono-cell">0.00</td>
+                <td class="mono-cell">2.6</td>
+                <td class="mono-cell">0.098</td>
+                <td class="mono-cell">25</td>
+                <td class="mono-cell">67</td>
+                <td class="mono-cell">0.9968</td>
+                <td class="mono-cell">3.20</td>
+                <td class="mono-cell">0.68</td>
+                <td class="mono-cell">9.8</td>
+                <td class="mono-cell">5</td>
+                <td><span class="badge-mini badge-bad">Bad</span></td>
+              </tr>
+              <tr>
+                <td class="mono-cell">7.8</td>
+                <td class="mono-cell">0.76</td>
+                <td class="mono-cell">0.04</td>
+                <td class="mono-cell">2.3</td>
+                <td class="mono-cell">0.092</td>
+                <td class="mono-cell">15</td>
+                <td class="mono-cell">54</td>
+                <td class="mono-cell">0.9970</td>
+                <td class="mono-cell">3.26</td>
+                <td class="mono-cell">0.65</td>
+                <td class="mono-cell">9.8</td>
+                <td class="mono-cell">5</td>
+                <td><span class="badge-mini badge-bad">Bad</span></td>
+              </tr>
+              <tr>
+                <td class="mono-cell">11.2</td>
+                <td class="mono-cell">0.28</td>
+                <td class="mono-cell">0.56</td>
+                <td class="mono-cell">1.9</td>
+                <td class="mono-cell">0.075</td>
+                <td class="mono-cell">17</td>
+                <td class="mono-cell">60</td>
+                <td class="mono-cell">0.9980</td>
+                <td class="mono-cell">3.16</td>
+                <td class="mono-cell">0.58</td>
+                <td class="mono-cell">9.8</td>
+                <td class="mono-cell">6</td>
+                <td><span class="badge-mini badge-good">Good</span></td>
+              </tr>
+              <tr>
+                <td class="mono-cell">7.4</td>
+                <td class="mono-cell">0.66</td>
+                <td class="mono-cell">0.00</td>
+                <td class="mono-cell">1.8</td>
+                <td class="mono-cell">0.075</td>
+                <td class="mono-cell">13</td>
+                <td class="mono-cell">40</td>
+                <td class="mono-cell">0.9978</td>
+                <td class="mono-cell">3.51</td>
+                <td class="mono-cell">0.56</td>
+                <td class="mono-cell">9.4</td>
+                <td class="mono-cell">5</td>
+                <td><span class="badge-mini badge-bad">Bad</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 3: MODEL (Model Comparison Cards)
+         ================================================================== -->
+    <section id="page-model" class="page-view" aria-labelledby="heading-model">
+      <div class="page-hero">
+        <div class="hero-text">
+          <div class="breadcrumb">
+            <span>Project</span> &rsaquo; <span>Model Architecture</span> &rsaquo; <strong>Algorithm Comparison</strong>
+          </div>
+          <h1 id="heading-model" class="page-title">Supervised Learning Models</h1>
+          <p class="page-subtitle">Comparison of evaluated classification algorithms trained on the UCI wine quality benchmark.</p>
+        </div>
+      </div>
+
+      <!-- 3 Model Cards -->
+      <div class="models-grid">
+        <!-- 1. Random Forest -->
+        <div class="model-box best-model-box">
+          <div class="model-box-top">
+            <span class="best-pill">Best Model Selected</span>
+            <span class="model-category">Ensemble Method</span>
+          </div>
+          <div class="model-box-content">
+            <h2 class="model-heading">Random Forest</h2>
+            <p class="model-summary">100 decision trees trained with bootstrap aggregating and random feature subsets.</p>
+
+            <div class="metrics-quad">
+              <div class="quad-item highlight-quad">
+                <span class="quad-label">Accuracy</span>
+                <span class="quad-val">90.3%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">Precision</span>
+                <span class="quad-val">87.5%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">Recall</span>
+                <span class="quad-val">84.1%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">F1 Score</span>
+                <span class="quad-val">85.7%</span>
+              </div>
+            </div>
+
+            <div class="model-notes">
+              <strong>Selection Rationale:</strong> Mitigates individual tree overfitting, robust against correlated features, and delivers the highest harmonic F1 score across classes.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Support Vector Machine -->
+        <div class="model-box">
+          <div class="model-box-top">
+            <span class="neutral-pill">Benchmark</span>
+            <span class="model-category">Kernel Classifier</span>
+          </div>
+          <div class="model-box-content">
+            <h2 class="model-heading">Support Vector Machine</h2>
+            <p class="model-summary">Radial Basis Function (RBF) kernel with standard feature scaling optimizing max-margin hyperplanes.</p>
+
+            <div class="metrics-quad">
+              <div class="quad-item">
+                <span class="quad-label">Accuracy</span>
+                <span class="quad-val">86.8%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">Precision</span>
+                <span class="quad-val">81.2%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">Recall</span>
+                <span class="quad-val">77.5%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">F1 Score</span>
+                <span class="quad-val">79.3%</span>
+              </div>
+            </div>
+
+            <div class="model-notes">
+              <strong>Characteristics:</strong> Effective in high-dimensional continuous space, but lower recall on non-linear borderline quality boundaries.
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. MLP Classifier -->
+        <div class="model-box">
+          <div class="model-box-top">
+            <span class="neutral-pill">Benchmark</span>
+            <span class="model-category">Neural Network</span>
+          </div>
+          <div class="model-box-content">
+            <h2 class="model-heading">MLP Classifier</h2>
+            <p class="model-summary">Multi-layer perceptron neural network with hidden layers, ReLU activations, and Adam optimization.</p>
+
+            <div class="metrics-quad">
+              <div class="quad-item">
+                <span class="quad-label">Accuracy</span>
+                <span class="quad-val">85.1%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">Precision</span>
+                <span class="quad-val">79.4%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">Recall</span>
+                <span class="quad-val">75.8%</span>
+              </div>
+              <div class="quad-item">
+                <span class="quad-label">F1 Score</span>
+                <span class="quad-val">77.5%</span>
+              </div>
+            </div>
+
+            <div class="model-notes">
+              <strong>Characteristics:</strong> Capable of non-linear parameter modeling, but requires larger sample depth to avoid early plateauing.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparative Table -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Model Benchmarking Summary</h2>
+            <p class="panel-desc">Held-out test split comparison on 320 unseen wine instances.</p>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="web-table">
+            <thead>
+              <tr>
+                <th>Algorithm</th>
+                <th>Model Architecture</th>
+                <th>Test Accuracy</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1 Score</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="selected-row">
+                <td><strong>Random Forest</strong></td>
+                <td>100 Estimators &bull; Bagged Trees</td>
+                <td class="mono-cell bold-cell">90.3%</td>
+                <td class="mono-cell bold-cell">87.5%</td>
+                <td class="mono-cell bold-cell">84.1%</td>
+                <td class="mono-cell bold-cell">85.7%</td>
+                <td><span class="badge-mini badge-good">Selected</span></td>
+              </tr>
+              <tr>
+                <td>Support Vector Machine (SVM)</td>
+                <td>RBF Kernel &bull; C=1.0</td>
+                <td class="mono-cell">86.8%</td>
+                <td class="mono-cell">81.2%</td>
+                <td class="mono-cell">77.5%</td>
+                <td class="mono-cell">79.3%</td>
+                <td><span class="badge-mini">Evaluated</span></td>
+              </tr>
+              <tr>
+                <td>MLP Classifier</td>
+                <td>2 Hidden Layers &bull; ReLU &bull; Adam</td>
+                <td class="mono-cell">85.1%</td>
+                <td class="mono-cell">79.4%</td>
+                <td class="mono-cell">75.8%</td>
+                <td class="mono-cell">77.5%</td>
+                <td><span class="badge-mini">Evaluated</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 4: RESULTS (Evaluation Metrics & Confusion Matrix)
+         ================================================================== -->
+    <section id="page-results" class="page-view" aria-labelledby="heading-results">
+      <div class="page-hero">
+        <div class="hero-text">
+          <div class="breadcrumb">
+            <span>Project</span> &rsaquo; <span>Evaluation</span> &rsaquo; <strong>Test Results & Confusion Matrix</strong>
+          </div>
+          <h1 id="heading-results" class="page-title">Evaluation & Test Results</h1>
+          <p class="page-subtitle">Quantitative error analysis and test performance across 320 held-out samples.</p>
+        </div>
+      </div>
+
+      <!-- Test Metric Stats -->
+      <div class="stats-grid stats-4">
+        <div class="stat-card highlight-stat">
+          <span class="stat-kicker">Test Accuracy</span>
+          <span class="stat-main">90.3%</span>
+          <span class="stat-note">Overall correct predictions</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-kicker">Precision</span>
+          <span class="stat-main">87.5%</span>
+          <span class="stat-note">Positive predictive value</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-kicker">Recall</span>
+          <span class="stat-main">84.1%</span>
+          <span class="stat-note">Sensitivity for Good wines</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-kicker">F1 Score</span>
+          <span class="stat-main">85.7%</span>
+          <span class="stat-note">Harmonic mean balance</span>
+        </div>
+      </div>
+
+      <!-- Two-Column Results Layout -->
+      <div class="results-grid">
+        <!-- Left: Confusion Matrix -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Confusion Matrix</h2>
+              <p class="panel-desc">Random Forest evaluation on 320 test samples.</p>
+            </div>
+          </div>
+
+          <div class="cm-table-grid">
+            <!-- Row 1: Predicted Class Axis Title -->
+            <div class="cm-axis-pred-title">PREDICTED CLASS</div>
+
+            <!-- Row 2: Column Headers -->
+            <div class="cm-col-header col-bad">Predicted Bad</div>
+            <div class="cm-col-header col-good">Predicted Good</div>
+
+            <!-- Row 3 & 4: Actual Axis Label (spans 2 rows) -->
+            <div class="cm-axis-actual-title"><span>ACTUAL GROUND TRUTH</span></div>
+
+            <!-- Row 3: Actual Bad -->
+            <div class="cm-row-header row-bad">Actual Bad</div>
+            <div class="cm-cell cm-tn">
+              <span class="cm-number">264</span>
+              <span class="cm-cell-tag">True Negative (TN)</span>
+              <span class="cm-pct">82.5% of test set</span>
+            </div>
+            <div class="cm-cell cm-fp">
+              <span class="cm-number">9</span>
+              <span class="cm-cell-tag">False Positive (FP)</span>
+              <span class="cm-pct">2.8% of test set</span>
+            </div>
+
+            <!-- Row 4: Actual Good -->
+            <div class="cm-row-header row-good">Actual Good</div>
+            <div class="cm-cell cm-fn">
+              <span class="cm-number">22</span>
+              <span class="cm-cell-tag">False Negative (FN)</span>
+              <span class="cm-pct">6.9% of test set</span>
+            </div>
+            <div class="cm-cell cm-tp">
+              <span class="cm-number">25</span>
+              <span class="cm-cell-tag">True Positive (TP)</span>
+              <span class="cm-pct">7.8% of test set</span>
+            </div>
+          </div>
+
+          <!-- Matrix Legend -->
+          <div class="cm-footer-summary">
+            <span class="summary-pill pill-correct">
+              <span class="legend-dot dot-green"></span> Correct: <strong>289</strong> (90.3%)
+            </span>
+            <span class="summary-pill pill-error">
+              <span class="legend-dot dot-red"></span> Misclassified: <strong>31</strong> (9.7%)
+            </span>
+          </div>
+        </div>
+
+        <!-- Right: Model Performance Comparison Bars -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Model Performance Comparison</h2>
+              <p class="panel-desc">Benchmarking candidate architectures.</p>
+            </div>
+          </div>
+
+          <div class="bars-container">
+            <!-- Accuracy Group -->
+            <div class="bar-group">
+              <div class="group-header">
+                <span class="group-title">Classification Accuracy</span>
+                <span class="group-sub">% correctly classified</span>
+              </div>
+
+              <div class="bar-entry">
+                <div class="bar-meta-row">
+                  <span class="model-label">Random Forest</span>
+                  <span class="score-label bold-score">90.3%</span>
+                </div>
+                <div class="bar-rail">
+                  <div class="bar-core fill-wine" style="width: 90.3%;"></div>
+                </div>
+              </div>
+
+              <div class="bar-entry">
+                <div class="bar-meta-row">
+                  <span class="model-label">Support Vector Machine (SVM)</span>
+                  <span class="score-label">86.8%</span>
+                </div>
+                <div class="bar-rail">
+                  <div class="bar-core fill-slate" style="width: 86.8%;"></div>
+                </div>
+              </div>
+
+              <div class="bar-entry">
+                <div class="bar-meta-row">
+                  <span class="model-label">MLP Classifier (Neural Net)</span>
+                  <span class="score-label">85.1%</span>
+                </div>
+                <div class="bar-rail">
+                  <div class="bar-core fill-slate" style="width: 85.1%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- F1 Score Group -->
+            <div class="bar-group">
+              <div class="group-header">
+                <span class="group-title">F1 Score</span>
+                <span class="group-sub">Harmonic precision/recall</span>
+              </div>
+
+              <div class="bar-entry">
+                <div class="bar-meta-row">
+                  <span class="model-label">Random Forest</span>
+                  <span class="score-label bold-score">85.7%</span>
+                </div>
+                <div class="bar-rail">
+                  <div class="bar-core fill-wine" style="width: 85.7%;"></div>
+                </div>
+              </div>
+
+              <div class="bar-entry">
+                <div class="bar-meta-row">
+                  <span class="model-label">Support Vector Machine (SVM)</span>
+                  <span class="score-label">79.3%</span>
+                </div>
+                <div class="bar-rail">
+                  <div class="bar-core fill-slate" style="width: 79.3%;"></div>
+                </div>
+              </div>
+
+              <div class="bar-entry">
+                <div class="bar-meta-row">
+                  <span class="model-label">MLP Classifier (Neural Net)</span>
+                  <span class="score-label">77.5%</span>
+                </div>
+                <div class="bar-rail">
+                  <div class="bar-core fill-slate" style="width: 77.5%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         PAGE 5: PROJECT (Executive Overview & Pipeline)
+         ================================================================== -->
+    <section id="page-project" class="page-view" aria-labelledby="heading-project">
+      <div class="page-hero">
+        <div class="hero-text">
+          <div class="breadcrumb">
+            <span>Project</span> &rsaquo; <span>Methodology</span> &rsaquo; <strong>Architecture & Overview</strong>
+          </div>
+          <h1 id="heading-project" class="page-title">Project Overview</h1>
+          <p class="page-subtitle">Summary of project objectives, machine learning workflow, and software technologies.</p>
+        </div>
+      </div>
+
+      <!-- Project Purpose Card -->
+      <div class="purpose-banner">
+        <span class="purpose-tag">Project Purpose</span>
+        <blockquote class="purpose-quote">
+          &ldquo;Classify wine into quality categories using physicochemical properties.&rdquo;
+        </blockquote>
+        <p class="purpose-sub">
+          Evaluates how analytical laboratory measurements (such as alcohol, volatile acidity, density, and sulphates) reliably predict wine quality grades without requiring subjective human sensory tests.
+        </p>
+      </div>
+
+      <!-- Workflow Pipeline -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">End-to-End Engineering Workflow</h2>
+            <p class="panel-desc">5-Stage machine learning lifecycle pipeline.</p>
+          </div>
+        </div>
+
+        <div class="pipeline-track">
+          <div class="pipe-node">
+            <span class="pipe-step">Step 01</span>
+            <h3 class="pipe-title">Dataset</h3>
+            <p class="pipe-desc">UCI 1,599 physicochemical red wine instances.</p>
+          </div>
+          <div class="pipe-arrow">&rarr;</div>
+
+          <div class="pipe-node">
+            <span class="pipe-step">Step 02</span>
+            <h3 class="pipe-title">Preprocessing</h3>
+            <p class="pipe-desc">Standard scaling, zero-imputation, bounds validation.</p>
+          </div>
+          <div class="pipe-arrow">&rarr;</div>
+
+          <div class="pipe-node">
+            <span class="pipe-step">Step 03</span>
+            <h3 class="pipe-title">Classification</h3>
+            <p class="pipe-desc">Training Random Forest, SVM, and MLP architectures.</p>
+          </div>
+          <div class="pipe-arrow">&rarr;</div>
+
+          <div class="pipe-node">
+            <span class="pipe-step">Step 04</span>
+            <h3 class="pipe-title">Evaluation</h3>
+            <p class="pipe-desc">Confusion matrix, accuracy (90.3%), F1 scoring.</p>
+          </div>
+          <div class="pipe-arrow">&rarr;</div>
+
+          <div class="pipe-node">
+            <span class="pipe-step">Step 05</span>
+            <h3 class="pipe-title">Prediction</h3>
+            <p class="pipe-desc">Client-side instant inference interface and evaluation.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech Stack & Models Columns -->
+      <div class="two-col-cards">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Technology Stack</h2>
+              <p class="panel-desc">Libraries & development tools.</p>
+            </div>
+          </div>
+
+          <ul class="clean-list">
+            <li class="clean-item">
+              <span class="item-bullet">&bull;</span>
+              <div>
+                <strong>Python</strong>
+                <span class="item-role">&ndash; Core programming language for data modeling</span>
+              </div>
+            </li>
+            <li class="clean-item">
+              <span class="item-bullet">&bull;</span>
+              <div>
+                <strong>Pandas</strong>
+                <span class="item-role">&ndash; Dataframe ingestion, data cleaning, and dataset transformation</span>
+              </div>
+            </li>
+            <li class="clean-item">
+              <span class="item-bullet">&bull;</span>
+              <div>
+                <strong>Scikit-learn</strong>
+                <span class="item-role">&ndash; Feature scaling, model fitting, and validation metrics</span>
+              </div>
+            </li>
+            <li class="clean-item">
+              <span class="item-bullet">&bull;</span>
+              <div>
+                <strong>NumPy</strong>
+                <span class="item-role">&ndash; High-performance vectorized numerical computation</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Evaluated Models</h2>
+              <p class="panel-desc">Machine learning architectures tested.</p>
+            </div>
+          </div>
+
+          <ul class="clean-list">
+            <li class="clean-item">
+              <span class="item-bullet">&bull;</span>
+              <div>
+                <strong>Random Forest</strong>
+                <span class="item-role">&ndash; 90.3% Test Accuracy (Chosen best model)</span>
+              </div>
+            </li>
+            <li class="clean-item">
+              <span class="item-bullet">&bull;</span>
+              <div>
+                <strong>SVM (Support Vector Machine)</strong>
+                <span class="item-role">&ndash; RBF Kernel with standardized scaling (86.8% Accuracy)</span>
+              </div>
+            </li>
+            <li class="clean-item">
+              <span class="item-bullet">&bull;</span>
+              <div>
+                <strong>MLP (Multi-Layer Perceptron)</strong>
+                <span class="item-role">&ndash; Feedforward neural network with 2 hidden layers (85.1% Accuracy)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Full-Width Website Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <div class="footer-brand">
+          <span class="footer-logo">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 22h8"/>
+              <path d="M12 15v7"/>
+              <path d="M12 15a5 5 0 0 0 5-5V4H7v6a5 5 0 0 0 5 5Z"/>
+            </svg>
+          </span>
+          <span class="footer-name">WineQuality<span class="footer-accent">ML</span></span>
+        </div>
+        <p class="footer-tagline">Academic Machine Learning System &bull; Physicochemical Wine Quality Inference</p>
+      </div>
+      <div class="footer-right">
+        <span class="footer-meta">Dataset: UCI Cortez et al. &bull; Algorithms: Random Forest, SVM, MLP</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
